@@ -154,19 +154,27 @@ address                                          |                              
                                 ZIPLIST_ENTRY_HEAD                  |   ZIPLIST_ENTRY_END
                                                                                          |
                                                                     ZIPLIST_ENTRY_TAIL
-   Óò                   ³¤¶È/ÀàĞÍ        ÓòµÄÖµ
-zlbytes	        uint32_t	        Õû¸ö ziplist Õ¼ÓÃµÄÄÚ´æ×Ö½ÚÊı£¬¶Ô ziplist ½øĞĞÄÚ´æÖØ·ÖÅä£¬»òÕß¼ÆËãÄ©¶ËÊ±Ê¹ÓÃ¡£
-zltail	            uint32_t	        µ½´ï ziplist ±íÎ²½ÚµãµÄÆ«ÒÆÁ¿¡£ Í¨¹ıÕâ¸öÆ«ÒÆÁ¿£¬¿ÉÒÔÔÚ²»±éÀúÕû¸ö ziplist µÄÇ°ÌáÏÂ£¬µ¯³ö±íÎ²½Úµã¡£
-zllen	                uint16_t	        ziplist ÖĞ½ÚµãµÄÊıÁ¿¡£ µ±Õâ¸öÖµĞ¡ÓÚ UINT16_MAX £¨65535£©Ê±£¬Õâ¸öÖµ¾ÍÊÇ ziplist ÖĞ½ÚµãµÄÊıÁ¿£» µ±Õâ¸öÖµµÈÓÚ UINT16_MAX Ê±£¬½ÚµãµÄÊıÁ¿ĞèÒª±éÀúÕû¸ö ziplist ²ÅÄÜ¼ÆËãµÃ³ö¡£
-entryX	            ?	                    ziplist Ëù±£´æµÄ½Úµã£¬¸÷¸ö½ÚµãµÄ³¤¶È¸ù¾İÄÚÈİ¶ø¶¨¡£
-zlend	            uint8_t	            255 µÄ¶ş½øÖÆÖµ 1111 1111 £¨UINT8_MAX£© £¬ÓÃÓÚ±ê¼Ç ziplist µÄÄ©¶Ë¡£
+ åŸŸ	                 é•¿åº¦/ç±»å‹	      åŸŸçš„å€¼
+zlbytes	        uint32_t	         æ•´ä¸ª ziplist å ç”¨çš„å†…å­˜å­—èŠ‚æ•°ï¼Œå¯¹ ziplist è¿›è¡Œå†…å­˜é‡åˆ†é…ï¼Œæˆ–è€…è®¡ç®—æœ«ç«¯æ—¶ä½¿ç”¨ã€‚
+zltail	            uint32_t	        åˆ°è¾¾ ziplist è¡¨å°¾èŠ‚ç‚¹çš„åç§»é‡ã€‚ é€šè¿‡è¿™ä¸ªåç§»é‡ï¼Œå¯ä»¥åœ¨ä¸éå†æ•´ä¸ª ziplist çš„å‰æä¸‹ï¼Œå¼¹å‡ºè¡¨å°¾èŠ‚ç‚¹ã€‚
+zllen	                uint16_t	        ziplist ä¸­èŠ‚ç‚¹çš„æ•°é‡ã€‚ å½“è¿™ä¸ªå€¼å°äº UINT16_MAX ï¼ˆ65535ï¼‰æ—¶ï¼Œè¿™ä¸ªå€¼å°±æ˜¯ ziplist ä¸­èŠ‚ç‚¹çš„æ•°é‡ï¼› å½“è¿™ä¸ªå€¼ç­‰äº UINT16_MAX æ—¶ï¼ŒèŠ‚ç‚¹çš„æ•°é‡éœ€è¦éå†æ•´ä¸ª ziplist æ‰èƒ½è®¡ç®—å¾—å‡ºã€‚
+entryX	            ?	                    ziplist æ‰€ä¿å­˜çš„èŠ‚ç‚¹ï¼Œå„ä¸ªèŠ‚ç‚¹çš„é•¿åº¦æ ¹æ®å†…å®¹è€Œå®šã€‚
+zlend	            uint8_t	            255 çš„äºŒè¿›åˆ¶å€¼ 1111 1111 ï¼ˆUINT8_MAXï¼‰ ï¼Œç”¨äºæ ‡è®° ziplist çš„æœ«ç«¯ã€‚
  */
+ // è·å–å¤´æŒ‡é’ˆå†…å®¹ï¼Œå³æ˜¯zlbyteså†…å®¹ï¼Œä¹Ÿå°±æ˜¯æ•´ä¸ªé“¾è¡¨çš„é•¿åº¦
 #define ZIPLIST_BYTES(zl)       (*((uint32_t*)(zl)))
+// é¦–åœ°å€åç§»4bytesï¼Œå³æ˜¯zltailçš„åœ°å€ï¼ŒæŒ‡é’ˆå°±æ˜¯zltailçš„å†…å®¹
 #define ZIPLIST_TAIL_OFFSET(zl) (*((uint32_t*)((zl)+sizeof(uint32_t))))
+// åŒä¸Šï¼Œåç§»ä¸¤ä¸ª4bytes
 #define ZIPLIST_LENGTH(zl)      (*((uint16_t*)((zl)+sizeof(uint32_t)*2)))
+// header = zlbytes + zltail + zllen çš„åç§»é‡
 #define ZIPLIST_HEADER_SIZE     (sizeof(uint32_t)*2+sizeof(uint16_t))
+
+// é“¾è¡¨åç§»headerï¼Œå³æ˜¯ç¬¬ä¸€ä¸ªentryçš„å¤´
 #define ZIPLIST_ENTRY_HEAD(zl)  ((zl)+ZIPLIST_HEADER_SIZE)
+// é“¾è¡¨æŒ‰ç…§zltailçš„å†…å®¹åç§»ï¼Œå³æ˜¯æœ€åä¸€ä¸ªentryçš„å°¾å·´
 #define ZIPLIST_ENTRY_TAIL(zl)  ((zl)+intrev32ifbe(ZIPLIST_TAIL_OFFSET(zl)))
+// todo: ä¸ºä»€ä¹ˆå‡ 1 å‘¢ï¼Ÿ
 #define ZIPLIST_ENTRY_END(zl)   ((zl)+intrev32ifbe(ZIPLIST_BYTES(zl))-1)
 
 /* We know a positive increment can only be 1 because entries can only be
