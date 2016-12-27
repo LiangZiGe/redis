@@ -422,8 +422,9 @@ void _redisAssert(char *estr, char *file, int line) {
     server.assert_file = file;
     server.assert_line = line;
     redisLog(REDIS_WARNING,"(forcing SIGSEGV to print the bug report.)");
-#endif*/
+#endif
     *((char*)-1) = 'x';
+    * */
 }
 /*
 
