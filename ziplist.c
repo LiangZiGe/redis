@@ -139,6 +139,28 @@
 #define ZIP_IS_STR(enc) (((enc) & ZIP_STR_MASK) < ZIP_STR_MASK)
 
 /* Utility macros */
+/**
+ * url:
+ * http://redisbook.readthedocs.io/en/latest/compress-datastruct/ziplist.html
+ *
+area                  |<---- ziplist header ---->|<----------- entries ------------->|<-end->|
+
+size                  4 bytes  4 bytes  2 bytes    ?        ?        ?        ?             1 byte
+                      +---------+--------+-------+--------+--------+--------+--------+-------+
+component   | zlbytes | zltail | zllen | entry1 | entry2 |  ...   | entryN | zlend |
+                    +---------+--------+-------+--------+--------+--------+--------+-------+
+                                                        ^                                    ^            ^
+address                                          |                                    |              |
+                                ZIPLIST_ENTRY_HEAD                  |   ZIPLIST_ENTRY_END
+                                                                                         |
+                                                                    ZIPLIST_ENTRY_TAIL
+   域                   长度/类型        域的值
+zlbytes	        uint32_t	        整个 ziplist 占用的内存字节数，对 ziplist 进行内存重分配，或者计算末端时使用。
+zltail	            uint32_t	        到达 ziplist 表尾节点的偏移量。 通过这个偏移量，可以在不遍历整个 ziplist 的前提下，弹出表尾节点。
+zllen	                uint16_t	        ziplist 中节点的数量。 当这个值小于 UINT16_MAX （65535）时，这个值就是 ziplist 中节点的数量； 当这个值等于 UINT16_MAX 时，节点的数量需要遍历整个 ziplist 才能计算得出。
+entryX	            ?	                    ziplist 所保存的节点，各个节点的长度根据内容而定。
+zlend	            uint8_t	            255 的二进制值 1111 1111 （UINT8_MAX） ，用于标记 ziplist 的末端。
+ */
 #define ZIPLIST_BYTES(zl)       (*((uint32_t*)(zl)))
 #define ZIPLIST_TAIL_OFFSET(zl) (*((uint32_t*)((zl)+sizeof(uint32_t))))
 #define ZIPLIST_LENGTH(zl)      (*((uint16_t*)((zl)+sizeof(uint32_t)*2)))
