@@ -17,25 +17,25 @@
 #define FDSIZE      1000
 #define EPOLLEVENTS 100
 
-//º¯ÊıÉùÃ÷
-//´´½¨Ì×½Ó×Ö²¢½øĞĞ°ó¶¨
+//å‡½æ•°å£°æ˜
+//åˆ›å»ºå¥—æ¥å­—å¹¶è¿›è¡Œç»‘å®š
 static int socket_bind(const char* ip,int port);
-//IO¶àÂ·¸´ÓÃepoll
+//IOå¤šè·¯å¤ç”¨epoll
 static void do_epoll(int listenfd);
-//ÊÂ¼ş´¦Àíº¯Êı
+//äº‹ä»¶å¤„ç†å‡½æ•°
 static void
 handle_events(int epollfd,struct epoll_event *events,int num,int listenfd,char *buf);
-//´¦Àí½ÓÊÕµ½µÄÁ¬½Ó
+//å¤„ç†æ¥æ”¶åˆ°çš„è¿æ¥
 static void handle_accpet(int epollfd,int listenfd);
-//¶Á´¦Àí
+//è¯»å¤„ç†
 static void do_read(int epollfd,int fd,char *buf);
-//Ğ´´¦Àí
+//å†™å¤„ç†
 static void do_write(int epollfd,int fd,char *buf);
-//Ìí¼ÓÊÂ¼ş
+//æ·»åŠ äº‹ä»¶
 static void add_event(int epollfd,int fd,int state);
-//ĞŞ¸ÄÊÂ¼ş
+//ä¿®æ”¹äº‹ä»¶
 static void modify_event(int epollfd,int fd,int state);
-//É¾³ıÊÂ¼ş
+//åˆ é™¤äº‹ä»¶
 static void delete_event(int epollfd,int fd,int state);
 
 int main(int argc,char *argv[])
@@ -76,13 +76,13 @@ static void do_epoll(int listenfd)
     int ret;
     char buf[MAXSIZE];
     memset(buf,0,MAXSIZE);
-    //´´½¨Ò»¸öÃèÊö·û
+    //åˆ›å»ºä¸€ä¸ªæè¿°ç¬¦
     epollfd = epoll_create(FDSIZE);
-    //Ìí¼Ó¼àÌıÃèÊö·ûÊÂ¼ş
+    //æ·»åŠ ç›‘å¬æè¿°ç¬¦äº‹ä»¶
     add_event(epollfd,listenfd,EPOLLIN);
     for ( ; ; )
     {
-        //»ñÈ¡ÒÑ¾­×¼±¸ºÃµÄÃèÊö·ûÊÂ¼ş
+        //è·å–å·²ç»å‡†å¤‡å¥½çš„æè¿°ç¬¦äº‹ä»¶
         ret = epoll_wait(epollfd,events,EPOLLEVENTS,-1);
         handle_events(epollfd,events,ret,listenfd,buf);
     }
@@ -94,11 +94,11 @@ handle_events(int epollfd,struct epoll_event *events,int num,int listenfd,char *
 {
     int i;
     int fd;
-    //½øĞĞÑ¡ºÃ±éÀú
+    //è¿›è¡Œé€‰å¥½éå†
     for (i = 0;i < num;i++)
     {
         fd = events[i].data.fd;
-        //¸ù¾İÃèÊö·ûµÄÀàĞÍºÍÊÂ¼şÀàĞÍ½øĞĞ´¦Àí
+        //æ ¹æ®æè¿°ç¬¦çš„ç±»å‹å’Œäº‹ä»¶ç±»å‹è¿›è¡Œå¤„ç†
         if ((fd == listenfd) &&(events[i].events & EPOLLIN))
             handle_accpet(epollfd,listenfd);
         else if (events[i].events & EPOLLIN)
@@ -118,7 +118,7 @@ static void handle_accpet(int epollfd,int listenfd)
     else
     {
         printf("accept a new client: %s:%d\n",inet_ntoa(cliaddr.sin_addr),cliaddr.sin_port);
-        //Ìí¼ÓÒ»¸ö¿Í»§ÃèÊö·ûºÍÊÂ¼ş
+        //æ·»åŠ ä¸€ä¸ªå®¢æˆ·æè¿°ç¬¦å’Œäº‹ä»¶
         add_event(epollfd,clifd,EPOLLIN);
     }
 }
@@ -142,7 +142,7 @@ static void do_read(int epollfd,int fd,char *buf)
     else
     {
         printf("read message is : %s",buf);
-        //ĞŞ¸ÄÃèÊö·û¶ÔÓ¦µÄÊÂ¼ş£¬ÓÉ¶Á¸ÄÎªĞ´
+        //ä¿®æ”¹æè¿°ç¬¦å¯¹åº”çš„äº‹ä»¶ï¼Œç”±è¯»æ”¹ä¸ºå†™
         modify_event(epollfd,fd,EPOLLOUT);
     }
 }

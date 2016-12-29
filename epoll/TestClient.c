@@ -35,7 +35,7 @@ int main(int argc,char *argv[])
     servaddr.sin_port = htons(SERV_PORT);
     inet_pton(AF_INET,IPADDRESS,&servaddr.sin_addr);
     connect(sockfd,(struct sockaddr*)&servaddr,sizeof(servaddr));
-    //处理连接
+    //澶勭悊杩炴帴
     handle_connection(sockfd);
     close(sockfd);
     return 0;
