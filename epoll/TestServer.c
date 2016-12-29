@@ -51,16 +51,28 @@ static int socket_bind(const char* ip,int port)
 {
     int  listenfd;
     struct sockaddr_in servaddr;
+
+    // 得到服务器套接字
     listenfd = socket(AF_INET,SOCK_STREAM,0);
     if (listenfd == -1)
     {
         perror("socket error:");
         exit(1);
     }
+
+    // 服务器套接字结构体初始化
     bzero(&servaddr,sizeof(servaddr));
+
+    // 创建套接字时，用该字段指定地址家族，对于TCP/IP协议的，必须设置为AF_INET。
     servaddr.sin_family = AF_INET;
+
+    // 该函数完成两个功能：1.字符串->二进制数值  2.主机字节序->网络字节序（所以调用此函数后不需htonl了)
+    // 第二个参数是ip地址字符串的指针
+    // 第三个参数使用&servaddr.sin_addr.s_addr也可以通过
     inet_pton(AF_INET,ip,&servaddr.sin_addr);
+
     servaddr.sin_port = htons(port);
+
     if (bind(listenfd,(struct sockaddr*)&servaddr,sizeof(servaddr)) == -1)
     {
         perror("bind error: ");
