@@ -8,9 +8,13 @@
         - redis-cli.c/cliSendCommand
             - hiredis.c/redisAppendCommandArgv
                 - hiredis.c/redisFormatCommandArgv
-                ```命令格式化```
+                ```markdown
+                命令格式化
+                ```
                 - hiredis.c/__redisAppendCommand    
-                ```写入全局的 redisContext 的 write 缓冲区 obuf 中```
+                ```markdown
+                写入全局的 redisContext 的 write 缓冲区 obuf 中
+                ```
                                 
 - 向服务器发送命令
     - redis-cli.c/cliSendCommand
