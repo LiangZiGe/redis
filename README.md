@@ -46,6 +46,7 @@
                     ```markdown
                     绑定readQueryFromClient到事件loop,redis的监听socket收到数据时将调用该函数进行处理
                     ```
+                    
  ###命令同步
  - redis.c/call
     - redis.c/propagate
