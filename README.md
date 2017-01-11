@@ -58,18 +58,18 @@
             - networking.c/addReply
                 - networking.c/prepareClientToWrite
                     - networking.c/sendReplyToClient
-                        ```C
-                        void sendReplyToClient(aeEventLoop *el, int fd, void *privdata, int mask){
-                            // 回复缓存或者回复列表有值 写出去
-                            while(c->bufpos > 0 || listLength(c->reply)) {
-                                // 因为在 addReply方法中对 c->buf 写入时空间不够，就复制到 c->reply 链表中了，所以有如下处理。
-                                if (c->bufpos > 0) {
-                                    // 处理回复缓存
-                                }else{
-                                    // 处理回复列表
-                                }
+                    ```C
+                    void sendReplyToClient(aeEventLoop *el, int fd, void *privdata, int mask){
+                        // 回复缓存或者回复列表有值 写出去
+                        while(c->bufpos > 0 || listLength(c->reply)) {
+                            // 因为在 addReply方法中对 c->buf 写入时空间不够，就复制到 c->reply 链表中了，所以有如下处理。
+                            if (c->bufpos > 0) {
+                                // 处理回复缓存
+                            }else{
+                                // 处理回复列表
                             }
-                            // 写检查
-                            // 释放写fd
                         }
-                        ```
+                        // 写检查
+                        // 释放写fd
+                    }
+                     ```
