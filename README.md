@@ -59,6 +59,28 @@
                 - networking.c/prepareClientToWrite
                     - networking.c/sendReplyToClient
                     ```C
+                    void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
+                        // todo:
+                    }
+                    
+                    void addReply(redisClient *c, robj *obj) {
+                        // 为客户端安装写处理器到事件循环
+                        if (prepareClientToWrite(c) != REDIS_OK) return;
+                        if(sds类型)
+                            // 添加到回复缓存c->buf，如果回复缓存c->buf空间不足添加到回复链表c->reply
+                        else
+                            // 处理integer编码数据
+                    }
+                    
+                    int prepareClientToWrite(redisClient *c) {
+                        // 核心处理，sendReplyToClient写处理器到事件循环
+                        if (c->bufpos == 0 && listLength(c->reply) == 0 &&
+                            (c->replstate == REDIS_REPL_NONE ||
+                             c->replstate == REDIS_REPL_ONLINE) &&
+                            aeCreateFileEvent(server.el, c->fd, AE_WRITABLE,
+                            sendReplyToClient, c) == AE_ERR) return REDIS_ERR;
+                    }
+                    
                     void sendReplyToClient(aeEventLoop *el, int fd, void *privdata, int mask){
                         // 回复缓存或者回复列表有值 写出去
                         while(c->bufpos > 0 || listLength(c->reply)) {
