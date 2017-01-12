@@ -1,8 +1,11 @@
-# redis
+Redis 3.0 源码研究
+============================
+本项目参考
+[redisbook](http://origin.redisbook.com)、[dumbee](http://dumbee.net/archives/114')、[redis-3.0-annotated](https://github.com/huangz1990/redis-3.0-annotated)
 
-##命令处理流程
+#命令处理流程
 
-###客户端
+##客户端
 - 对输入命令的处理
     - redis-cli.c/repl
         - redis-cli.c/cliSendCommand
@@ -31,7 +34,7 @@
             - redis-cli.c/cliFormatReplyRaw
             - fwrite
             
- ###服务端
+ ##服务端
  - redis.c/initServer
     - redis.c/listenToPort
         - anet.c/anetTcpServer
@@ -51,7 +54,7 @@
                     绑定readQueryFromClient到事件loop,redis的监听socket收到数据时将调用该函数进行处理
                     ```
                     
- ###命令同步
+ ##命令同步
  - redis.c/call
     - redis.c/propagate
         - replication.c/replicationFeedSlaves
@@ -60,7 +63,12 @@
                     - networking.c/sendReplyToClient
                     ```C
                     void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
-                        // todo:
+                        // 没有backlog ，则说明没有从服务器直接返回。
+                        // backlog作用：backlog是一个slave在一段时间内断开连接时记录salve数据的缓冲，所以一个slave在重新连接时，不必要全量的同步，而是一个增量同步就足够了，将在断开连接的这段
+                        // 时间内slave丢失的部分数据传送给它。同步的backlog越大，slave能够进行增量同步并且允许断开连接的时间就越长。backlog只分配一次并且至少需要一个slave连接
+                        // repl-backlog-size 1mb 当master在一段时间内不再与任何slave连接，backlog将会释放。以下选项配置了从最后一个 slave断开开始计时多少秒后，backlog缓冲将会释放。  0表示永不释放backlog  repl-backlog-ttl 3600
+                        
+                        
                     }
                     
                     void addReply(redisClient *c, robj *obj) {
