@@ -61,13 +61,41 @@ Redis 3.0 源码研究
                 - networking.c/prepareClientToWrite
                     - networking.c/sendReplyToClient
                     ```C
+                    void call(redisClient *c, int flags) {
+                        
+                    }
+                    
+                    void propagate(struct redisCommand *cmd, int dbid, robj **argv, int argc,int flags)  {
+                            replicationFeedSlaves(server.slaves,dbid,argv,argc);
+                    }
+                    
                     void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
+                        /** backlog作用：backlog是一个slave在一段时间内断开连接时记录salve数据的缓冲，所以一个slave在重新连接时，不必要全量的同步，而是一个增量同步就足够了，将在断开连接的这段时间内slave丢失的部分数据传送给它。同步的backlog越大，slave能够进行增量同步并且允许断开连接的时间就越长。backlog只分配一次并且至少需要一个slave连接repl-backlog-size 1mb 当master在一段时间内不再与任何slave连接，backlog将会释放。以下选项配置了从最后一个 slave断开开始计时多少秒后，backlog缓冲将会释放。  0表示永不释放backlog  repl-backlog-ttl 3600*/
+
                         // 没有backlog ，则说明没有从服务器直接返回。
-                        // backlog作用：backlog是一个slave在一段时间内断开连接时记录salve数据的缓冲，所以一个slave在重新连接时，不必要全量的同步，而是一个增量同步就足够了，将在断开连接的这段
-                        // 时间内slave丢失的部分数据传送给它。同步的backlog越大，slave能够进行增量同步并且允许断开连接的时间就越长。backlog只分配一次并且至少需要一个slave连接
-                        // repl-backlog-size 1mb 当master在一段时间内不再与任何slave连接，backlog将会释放。以下选项配置了从最后一个 slave断开开始计时多少秒后，backlog缓冲将会释放。  0表示永不释放backlog  repl-backlog-ttl 3600
+                        // 构建协议内容  
+                        // 将协议内容备份到 backlog
+                        // 将内容发送给各个从服务器
                         
-                        
+                        /**此方法难点如下：
+                            for (j = 0; j < argc; j++) {
+                                        long objlen = stringObjectLen(argv[j]);
+                            
+                                        /* We need to feed the buffer with the object as a bulk reply
+                                         * not just as a plain string, so create the $..CRLF payload len 
+                                         * ad add the final CRLF */
+                                        aux[0] = '$';
+                                        len = ll2string(aux+1,sizeof(aux)-1,objlen);
+                                        aux[len+1] = '\r';
+                                        aux[len+2] = '\n';
+                                        // 追加格式符号 $\r\n 到backlog
+                                        feedReplicationBacklog(aux,len+3);
+                                        // 追加命令或者参数到backlog，eg set key value中的三个变量之一
+                                        feedReplicationBacklogWithObject(argv[j]);
+                                        // 取aux[len+1] = '\r' 追加达到换行的目的
+                                        feedReplicationBacklog(aux+len+1,2);
+                                    }
+                        */
                     }
                     
                     void addReply(redisClient *c, robj *obj) {
