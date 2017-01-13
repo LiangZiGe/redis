@@ -61,14 +61,6 @@ Redis 3.0 源码研究
                 - networking.c/prepareClientToWrite
                     - networking.c/sendReplyToClient
                     ```C
-                    void call(redisClient *c, int flags) {
-                        
-                    }
-                    
-                    void propagate(struct redisCommand *cmd, int dbid, robj **argv, int argc,int flags)  {
-                            replicationFeedSlaves(server.slaves,dbid,argv,argc);
-                    }
-                    
                     void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
                         /** backlog作用：backlog是一个slave在一段时间内断开连接时记录salve数据的缓冲，所以一个slave在重新连接时，不必要全量的同步，而是一个增量同步就足够了，将在断开连接的这段时间内slave丢失的部分数据传送给它。同步的backlog越大，slave能够进行增量同步并且允许断开连接的时间就越长。backlog只分配一次并且至少需要一个slave连接repl-backlog-size 1mb 当master在一段时间内不再与任何slave连接，backlog将会释放。以下选项配置了从最后一个 slave断开开始计时多少秒后，backlog缓冲将会释放。  0表示永不释放backlog  repl-backlog-ttl 3600*/
 
