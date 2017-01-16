@@ -61,6 +61,14 @@ Redis 3.0 源码研究
                 - networking.c/prepareClientToWrite
                     - networking.c/sendReplyToClient
                     ```C
+                    void call(redisClient *c, int flags) {
+                        // 同步监控客户端
+                        // 执行函数    c->cmd->proc(c); redisCommandProc *proc 指针函数映射各命令实现
+                        // 慢日志记录
+                        // 命令传播
+                        // 传播 alsoPropagate() 产生的命令，3.0版本为什么没有调用alsoPropagate这个方法呢？
+                    }
+                    
                     void replicationFeedSlaves(list *slaves, int dictid, robj **argv, int argc) {
                         /** backlog作用：backlog是一个slave在一段时间内断开连接时记录salve数据的缓冲，所以一个slave在重新连接时，不必要全量的同步，而是一个增量同步就足够了，将在断开连接的这段时间内slave丢失的部分数据传送给它。同步的backlog越大，slave能够进行增量同步并且允许断开连接的时间就越长。backlog只分配一次并且至少需要一个slave连接repl-backlog-size 1mb 当master在一段时间内不再与任何slave连接，backlog将会释放。以下选项配置了从最后一个 slave断开开始计时多少秒后，backlog缓冲将会释放。  0表示永不释放backlog  repl-backlog-ttl 3600*/
 
