@@ -26,7 +26,7 @@ int main(int argc,char * argv[])
 
     te->timeProc = serverCron;
 
-    te->timeProc(NULL,10000000L);
+    te->timeProc(10000000L,NULL);
 
     return 0;
 }
