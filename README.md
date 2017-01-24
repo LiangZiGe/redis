@@ -2,9 +2,10 @@ Redis 3.0 源码研究
 ============================
 本项目参考：[redisbook](http://origin.redisbook.com)、[dumbee](http://dumbee.net/archives/114')、[redis-3.0-annotated](https://github.com/huangz1990/redis-3.0-annotated)，debug请使用[CLion](https://www.jetbrains.com/clion/)。
 
-#命令处理流程
+#命令处理
 
-##客户端
+##流程
+###客户端
 - 对输入命令的处理
     - redis-cli.c/repl
         - redis-cli.c/cliSendCommand
@@ -33,7 +34,7 @@ Redis 3.0 源码研究
             - redis-cli.c/cliFormatReplyRaw
             - fwrite
             
- ##服务端
+ ###服务端
  - redis.c/initServer
     - redis.c/listenToPort
         - anet.c/anetTcpServer
@@ -53,7 +54,7 @@ Redis 3.0 源码研究
                     绑定readQueryFromClient到事件loop,redis的监听socket收到数据时将调用该函数进行处理
                     ```
                     
- ##命令同步
+ ###命令同步
  - redis.c/call
     - redis.c/propagate
         - replication.c/replicationFeedSlaves
@@ -126,7 +127,8 @@ Redis 3.0 源码研究
                                 // 处理回复列表
                             }
                         }
-                        // 写检查
+                        // 写检查，系统中断重置nwritten，其他原因，打印错误日志，释放从连接
                         // 释放写fd
                     }
                      ```
+#

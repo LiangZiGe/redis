@@ -174,7 +174,7 @@ zlend	            uint8_t	            255 的二进制值 1111 1111 （UINT8_MAX
 #define ZIPLIST_ENTRY_HEAD(zl)  ((zl)+ZIPLIST_HEADER_SIZE)
 // 链表按照zltail的内容偏移，即是最后一个entry的尾巴
 #define ZIPLIST_ENTRY_TAIL(zl)  ((zl)+intrev32ifbe(ZIPLIST_TAIL_OFFSET(zl)))
-// todo: 为什么减 1 呢？
+// todo: 为什么减 1 呢? 为了去掉最后一个特殊字符?
 #define ZIPLIST_ENTRY_END(zl)   ((zl)+intrev32ifbe(ZIPLIST_BYTES(zl))-1)
 
 /* We know a positive increment can only be 1 because entries can only be
