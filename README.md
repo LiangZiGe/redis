@@ -4,4 +4,4 @@ Redis 3.0 源码研究
 
 笔记如下：
 
-- [命令处理](https://github.com/LiangZiGe/redis/blob/master/pages/%E5%91%BD%E4%BB%A4%E5%A4%84%E7%90%86.md)
+- [命令处理](https://github.com/LiangZiGe/redis/blob/master/pages/命令处理.md)
