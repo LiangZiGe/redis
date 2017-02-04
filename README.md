@@ -6,3 +6,4 @@ Redis 3.0 源码研究
 
 - [命令处理](https://github.com/LiangZiGe/redis/blob/master/pages/命令处理.md)
 - [epoll处理](https://github.com/LiangZiGe/redis/blob/master/pages/epoll处理.md)
+- [命令运行](https://github.com/LiangZiGe/redis/blob/master/pages/命令运行.md)
