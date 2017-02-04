@@ -5,6 +5,7 @@
 // √¸¡Ó±Í÷æ
 #include <stdio.h>
 #include <ctype.h>
+#include <strings.h>
 #include "../dict.h"
 #include "../sds.h"
 
@@ -185,13 +186,28 @@ unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) {
     return hash;
 }
 
+int dictSdsKeyCaseCompare(void *privdata, const void *key1,
+                          const void *key2)
+{
+    DICT_NOTUSED(privdata);
+
+    return strcasecmp(key1, key2) == 0;
+}
+
+void dictSdsDestructor(void *privdata, void *val)
+{
+    DICT_NOTUSED(privdata);
+
+    sdsfree(val);
+}
+
 /* Command table. sds string -> command struct pointer. */
 dictType commandTableDictType = {
         dictSdsCaseHash,           /* hash function */
         NULL,                      /* key dup */
         NULL,                      /* val dup */
-        NULL,     /* key compare */
-        NULL,         /* key destructor */
+        dictSdsKeyCaseCompare,     /* key compare */
+        dictSdsDestructor,         /* key destructor */
         NULL                       /* val destructor */
 };
 
