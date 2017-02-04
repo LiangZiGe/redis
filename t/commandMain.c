@@ -4,6 +4,7 @@
 
 // √¸¡Ó±Í÷æ
 #include <stdio.h>
+#include <ctype.h>
 #include "../dict.h"
 #include "../sds.h"
 
@@ -169,11 +170,35 @@ void populateCommandTable(void) {
         printf("%d",retval2);
     }
 }
+unsigned int dictSdsCaseHash(const void *key) {
+    return dictGenCaseHashFunction((unsigned char*)key, sdslen((char*)key));
+}
+
+static uint32_t dict_hash_function_seed = 5381;
+
+/* And a case insensitive hash function (based on djb hash) */
+unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) {
+    unsigned int hash = (unsigned int)dict_hash_function_seed;
+
+    while (len--)
+        hash = ((hash << 5) + hash) + (tolower(*buf++)); /* hash * 33 + c */
+    return hash;
+}
+
+/* Command table. sds string -> command struct pointer. */
+dictType commandTableDictType = {
+        dictSdsCaseHash,           /* hash function */
+        NULL,                      /* key dup */
+        NULL,                      /* val dup */
+        NULL,     /* key compare */
+        NULL,         /* key destructor */
+        NULL                       /* val destructor */
+};
 
 int main(int argc,char * argv[])
 {
-    server.commands = dictCreate(NULL,NULL);
-    server.orig_commands = dictCreate(NULL,NULL);
+    server.commands = dictCreate(&commandTableDictType,NULL);
+    server.orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
     return 0;
 }
