@@ -177,15 +177,6 @@ unsigned int dictSdsCaseHash(const void *key) {
 
 static uint32_t dict_hash_function_seed = 5381;
 
-/* And a case insensitive hash function (based on djb hash) */
-unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) {
-    unsigned int hash = (unsigned int)dict_hash_function_seed;
-
-    while (len--)
-        hash = ((hash << 5) + hash) + (tolower(*buf++)); /* hash * 33 + c */
-    return hash;
-}
-
 int dictSdsKeyCaseCompare(void *privdata, const void *key1,
                           const void *key2)
 {
