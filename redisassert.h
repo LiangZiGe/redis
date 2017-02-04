@@ -44,4 +44,10 @@
 
 void _redisAssert(char *estr, char *file, int line);
 
+
+void _redisAssert(char *estr, char *file, int line) {
+    printf("=== ASSERTION FAILED ===");
+    printf("==> %s:%d '%s' is not true",file,line,estr);
+}
+
 #endif
