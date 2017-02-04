@@ -99,7 +99,7 @@ struct redisServer {
     // 命令表（无 rename 配置选项的作用）
     dict *orig_commands;        /* Command table before command renaming. */
 
-};
+} server;
 
 extern struct redisServer server;
 
@@ -167,8 +167,8 @@ void populateCommandTable(void) {
          */
         retval2 = dictAdd(server.orig_commands, sdsnew(c->name), c);
 
-        printf("%d",retval1);
-        printf("%d",retval2);
+        printf("retval1 = %d\n",retval1);
+        printf("retval2 = %d\n",retval2);
     }
 }
 unsigned int dictSdsCaseHash(const void *key) {
