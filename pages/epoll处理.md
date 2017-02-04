@@ -94,7 +94,9 @@ epoll处理
     int aeProcessEvents(aeEventLoop *eventLoop, int flags)
     {
   
-         // 执行读事件，比如执行新建客户端的 rfileProc 映射到 readQueryFromClient 方法
+         // 执行读事件，比如执行新建客户端的 rfileProc 映射到 readQueryFromClient 方法，
+         // readQueryFromClient 这个方法首先读缓冲区数据然后再触发写事件，如果有写
+         // 事件又在这里处理，多么精妙的异步设计
          if (fe->mask & mask & AE_READABLE) {
             rfired = 1;
             fe->rfileProc(eventLoop,fd,fe->clientData,mask);
