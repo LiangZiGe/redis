@@ -99,6 +99,7 @@ struct redisServer {
 
 };
 
+extern struct redisServer server;
 
 void getCommand(redisClient *c);
 void setCommand(redisClient *c);
@@ -115,8 +116,6 @@ void setCommand(redisClient *c) {
 void getCommand(redisClient *c) {
     printf(" func getCommand ");
 }
-
-extern struct redisServer server;
 
 void populateCommandTable(void) {
     int j;
@@ -173,6 +172,8 @@ void populateCommandTable(void) {
 
 int main(int argc,char * argv[])
 {
+    server.commands = dictCreate(NULL,NULL);
+    server.orig_commands = dictCreate(NULL,NULL);
     populateCommandTable();
     return 0;
 }
