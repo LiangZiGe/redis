@@ -15,8 +15,8 @@ epoll处理
     set(SOURCE_FILES t/TestServer.c)
     add_executable(redis_code ${SOURCE_FILES})
 ```
-- 运行[TestServer.c](https://github.com/LiangZiGe/redis/tree/master/epoll/TestServer.c)
-- 再次修改CMakeLists.txt运行[TestClient.c](https://github.com/LiangZiGe/redis/tree/master/epoll/TestClient.c)
+- 运行[TestServer.c](/epoll/TestServer.c)
+- 再次修改CMakeLists.txt运行[TestClient.c](/epoll/TestClient.c)
 
 ###redis处理流程
 - 在redis.c/initServer()初始化事件槽
