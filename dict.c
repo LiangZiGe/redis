@@ -165,6 +165,7 @@ unsigned int dictGenHashFunction(const void *key, int len) {
 unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len) {
     unsigned int hash = (unsigned int)dict_hash_function_seed;
 
+    // 遍历整个buf，从左到右依次取对应小写字母的ascii值，然后与 ((hash << 5) + hash) = hash * 2^5 + hash = hash * 33 相加
     while (len--)
         hash = ((hash << 5) + hash) + (tolower(*buf++)); /* hash * 33 + c */
     return hash;
