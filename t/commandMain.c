@@ -261,6 +261,7 @@ int main(int argc,char * argv[])
 //    testDictSdsCaseHash();
 
     // testTolower
-    testTolower();
+//    testTolower();
+    printf("%d",(1 << 5));
     return 0;
 }
