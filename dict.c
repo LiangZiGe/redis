@@ -1655,7 +1655,6 @@ dictType dictTypeHeapStringCopyKeyValue = {
     _dictStringDestructor,         /* val destructor */
 };
 
-#define DICT_TEST_MAIN
 #ifdef DICT_TEST_MAIN
 int main(void)
 {

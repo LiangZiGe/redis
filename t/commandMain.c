@@ -109,6 +109,9 @@ void setCommand(redisClient *c);
 struct redisCommand redisCommandTable[] = {
         {"get",getCommand,2,"r",0,NULL,1,1,1,0,0},
         {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
+        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
+        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
+        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
 };
 
 void setCommand(redisClient *c) {
@@ -207,5 +210,6 @@ int main(int argc,char * argv[])
     server.commands = dictCreate(&commandTableDictType,NULL);
     server.orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
+    dictPrintStats(server.commands);
     return 0;
 }
