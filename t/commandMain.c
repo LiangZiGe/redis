@@ -236,11 +236,25 @@ dictType commandTableDictType = {
         NULL                       /* val destructor */
 };
 
+unsigned int dictSdsCaseHash(const void *key) {
+    return dictGenCaseHashFunction((unsigned char*)key, sdslen((char*)key));
+}
+
+void testDictSdsCaseHash(){
+    char *key = "get";
+    int hash = dictSdsCaseHash(key);
+    printf("%d",hash);
+}
+
 int main(int argc,char * argv[])
 {
-    server.commands = dictCreate(&commandTableDictType,NULL);
+    // ≤‚ ‘√¸¡Ó≥ı ºªØ
+    /*server.commands = dictCreate(&commandTableDictType,NULL);
     server.orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
-    dictPrintStats(server.commands);
+    dictPrintStats(server.commands);*/
+
+    // testDictSdsCaseHash
+    testDictSdsCaseHash();
     return 0;
 }
