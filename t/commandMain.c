@@ -236,13 +236,10 @@ dictType commandTableDictType = {
         NULL                       /* val destructor */
 };
 
-unsigned int dictSdsCaseHash(const void *key) {
-    return dictGenCaseHashFunction((unsigned char*)key, sdslen((char*)key));
-}
-
 void testDictSdsCaseHash(){
     char *key = "get";
-    int hash = dictSdsCaseHash(key);
+    sds s = sdsnew(key);
+    int hash = dictSdsCaseHash(s);
     printf("%d",hash);
 }
 
