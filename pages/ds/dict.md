@@ -16,7 +16,7 @@ dict
 
     ![structrue](/pics/dict-struct.png)
 
-    `typedef struct dictType`这个数据设计的太棒了，字典在很多场景下都有使用，这里给出了声明，在使用时指定具体实现函数，否则代码耦合就是一坨。比如在初始化命令数组时使用了`commandTableDictType`
+    `typedef struct dictType`这个数据结构设计的太棒了，字典在很多场景下都有使用，这里给出了声明，在使用时指定具体实现函数，否则代码耦合就是一坨。比如在初始化命令数组时使用了`commandTableDictType`
     ```C
             dictType commandTableDictType = {
                 dictSdsCaseHash,           /* hash function */
@@ -36,3 +36,4 @@ dict
     其他场景如下图：
     
     ![dict-find](/pics/dict-find.jpg)
+- 再继续debug，这个时候头脑里有了些许清晰的认识，接着分析细节。
