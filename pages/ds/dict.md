@@ -53,7 +53,7 @@ dict
     
     ![dict-find](/pics/dict-find.jpg)
 - 再继续debug，这个时候头脑里有了些许清晰的认识，接着分析细节。
-    - [dictGenCaseHashFunction](/dict.c#dictGenCaseHashFunction)函数，详见[hash.html](http://www.cse.yorku.ca/~oz/hash.html)。
+    - [dictGenCaseHashFunction](/dict.c#dictGenCaseHashFunction)函数：遍历整个buf，从左到右依次取对应小写字母的ascii值，然后与 ((hash << 5) + hash) = hash * 2^5 + hash = hash * 33 相加。详见[hash.html](http://www.cse.yorku.ca/~oz/hash.html)。
     - todo
      
      
