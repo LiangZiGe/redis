@@ -252,16 +252,15 @@ void testTolower(){
 int main(int argc,char * argv[])
 {
     // ≤‚ ‘√¸¡Ó≥ı ºªØ
-    /*server.commands = dictCreate(&commandTableDictType,NULL);
+    server.commands = dictCreate(&commandTableDictType,NULL);
     server.orig_commands = dictCreate(&commandTableDictType,NULL);
     populateCommandTable();
-    dictPrintStats(server.commands);*/
+    dictPrintStats(server.commands);
 
     // testDictSdsCaseHash
 //    testDictSdsCaseHash();
 
     // testTolower
 //    testTolower();
-    printf("%d",(1 << 5));
     return 0;
 }
