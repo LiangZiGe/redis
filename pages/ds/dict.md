@@ -31,6 +31,22 @@ dict
             
             server.commands = dictCreate(&commandTableDictType,NULL);
             server.orig_commands = dictCreate(&commandTableDictType,NULL);
+            
+            //////////////////////////////////////////////
+            // 定义基础宏，在操作字典的函数中使用，触发具体的实现函数，比如commandTableDictType
+            #define dictFreeVal(d, entry) \
+                if ((d)->type->valDestructor) \
+                    (d)->type->valDestructor((d)->privdata, (entry)->v.val)
+            
+            // 设置给定字典节点的值
+            #define dictSetVal(d, entry, _val_) do { \
+                if ((d)->type->valDup) \
+                    entry->v.val = (d)->type->valDup((d)->privdata, _val_); \
+                else \
+                    entry->v.val = (_val_); \
+            } while(0)
+            
+            // ...
     ```
     
     其他场景如下图：
