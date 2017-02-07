@@ -14,7 +14,25 @@ dict
 - 先debug跑多次，熟悉每个方法的作用。
 - debug完估计还是一头雾水，哈哈。那么来从[dict.h](/dict.h)来分析，首先认真看完[字典](http://origin.redisbook.com/internal-datastruct/dict.html)，然后把数据结构关联关系自己再画一遍。
 
-![structrue](/pics/dict-struct.png)
+    ![structrue](/pics/dict-struct.png)
 
+    `typedef struct dictType`这个数据设计的太棒了，字典在很多场景下都有使用，这里给出了声明，在使用时指定具体实现函数，否则代码耦合就是一坨。比如在初始化命令数组时使用了`commandTableDictType`
+    ```C
+            dictType commandTableDictType = {
+                dictSdsCaseHash,           /* hash function */
+                NULL,                      /* key dup */
+                NULL,                      /* val dup */
+                dictSdsKeyCaseCompare,     /* key compare */
+                dictSdsDestructor,         /* key destructor */
+                NULL                       /* val destructor */
+            };
+            
+            ///////////////////////////////
+            
+            server.commands = dictCreate(&commandTableDictType,NULL);
+            server.orig_commands = dictCreate(&commandTableDictType,NULL);
+    ```
     
+    其他场景如下图：
     
+    ![dict-find](/pics/dict-find.jpg)
