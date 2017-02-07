@@ -12,6 +12,9 @@ dict
         add_executable(redis_code ${SOURCE_FILES})
         
 - 先debug跑多次，熟悉每个方法的作用。
+- debug完估计还是一头雾水，哈哈。那么来从[dict.h](/dict.h)来分析，首先认真看完[字典](http://origin.redisbook.com/internal-datastruct/dict.html)，然后把数据结构关联关系自己再画一遍。
+
+![structrue](/pics/dict-struct.png)
 
     
     
