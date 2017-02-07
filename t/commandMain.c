@@ -105,6 +105,12 @@ extern struct redisServer server;
 
 void getCommand(redisClient *c);
 void setCommand(redisClient *c);
+void setnxCommand(redisClient *c);
+void setexCommand(redisClient *c);
+void psetexCommand(redisClient *c);
+void appendCommand(redisClient *c);
+void strlenCommand(redisClient *c);
+void delCommand(redisClient *c);
 
 struct redisCommand redisCommandTable[] = {
         {"get",getCommand,2,"r",0,NULL,1,1,1,0,0},
@@ -118,30 +124,32 @@ struct redisCommand redisCommandTable[] = {
 };
 
 void setnxCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func setnxCommand ");
 }
 
 void setexCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func setexCommand ");
 }
 
 void psetexCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func psetexCommand ");
 }
 
 void appendCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func appendCommand ");
 }
 
 void strlenCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func strlenCommand ");
 }
 
 void delCommand(redisClient *c) {
-    printf(" func setCommand ");
+    printf(" func delCommand ");
 }
 
-
+void setCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
 
 void getCommand(redisClient *c) {
     printf(" func getCommand ");
