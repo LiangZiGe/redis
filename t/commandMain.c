@@ -243,6 +243,12 @@ void testDictSdsCaseHash(){
     printf("%d",hash);
 }
 
+void testTolower(){
+    char *key = "GET";
+     int i = tolower(*key++);
+    printf("%c ascii code is %d",i,i);
+}
+
 int main(int argc,char * argv[])
 {
     // ≤‚ ‘√¸¡Ó≥ı ºªØ
@@ -252,6 +258,9 @@ int main(int argc,char * argv[])
     dictPrintStats(server.commands);*/
 
     // testDictSdsCaseHash
-    testDictSdsCaseHash();
+//    testDictSdsCaseHash();
+
+    // testTolower
+    testTolower();
     return 0;
 }
