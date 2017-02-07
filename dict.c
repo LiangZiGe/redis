@@ -1531,7 +1531,7 @@ void dictDisableResize(void) {
     dict_can_resize = 0;
 }
 
-#if 0
+/*#if 0*/
 
 /* The following is code that we don't use for Redis currently, but that is part
 of the library. */
@@ -1654,4 +1654,14 @@ dictType dictTypeHeapStringCopyKeyValue = {
     _dictStringDestructor,         /* key destructor */
     _dictStringDestructor,         /* val destructor */
 };
+
+#define DICT_TEST_MAIN
+#ifdef DICT_TEST_MAIN
+int main(void)
+{
+    dict *d = dictCreate(&dictTypeHeapStringCopyKey,NULL);
+    dictPrintStats(d);
+    return 0;
+}
 #endif
+/*#endif*/
