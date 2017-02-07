@@ -108,15 +108,40 @@ void setCommand(redisClient *c);
 
 struct redisCommand redisCommandTable[] = {
         {"get",getCommand,2,"r",0,NULL,1,1,1,0,0},
-        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
-        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
-        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
-        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0}
+        {"set",setCommand,-3,"wm",0,NULL,1,1,1,0,0},
+        {"setnx",setnxCommand,3,"wm",0,NULL,1,1,1,0,0},
+        {"setex",setexCommand,4,"wm",0,NULL,1,1,1,0,0},
+        {"psetex",psetexCommand,4,"wm",0,NULL,1,1,1,0,0},
+        {"append",appendCommand,3,"wm",0,NULL,1,1,1,0,0},
+        {"strlen",strlenCommand,2,"r",0,NULL,1,1,1,0,0},
+        {"del",delCommand,-2,"w",0,NULL,1,-1,1,0,0}
 };
 
-void setCommand(redisClient *c) {
+void setnxCommand(redisClient *c) {
     printf(" func setCommand ");
 }
+
+void setexCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
+
+void psetexCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
+
+void appendCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
+
+void strlenCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
+
+void delCommand(redisClient *c) {
+    printf(" func setCommand ");
+}
+
+
 
 void getCommand(redisClient *c) {
     printf(" func getCommand ");
@@ -170,8 +195,6 @@ void populateCommandTable(void) {
          */
         retval2 = dictAdd(server.orig_commands, sdsnew(c->name), c);
 
-        printf("retval1 = %d\n",retval1);
-        printf("retval2 = %d\n",retval2);
     }
 }
 unsigned int dictSdsCaseHash(const void *key) {
