@@ -7,4 +7,4 @@ Redis 3.0 源码研究
 - [命令处理](pages/命令处理.md)
 - [epoll处理](pages/epoll处理.md)
 - [命令运行](pages/命令运行.md)
-- 接下来研究什么呢？思考中。。。
+- [数据结构](pages/数据结构.md)
