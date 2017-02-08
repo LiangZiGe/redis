@@ -68,7 +68,7 @@ dict
                       return -1;
                   he = he->next;
              }
-             // 根据计算得到的idx后，再对应的`dictEntry`链表是否已经包含he，
+             // 根据计算得到的idx后，在对应bucket中的`dictEntry`链表是否已经包含he，
              // 验证通过后就得到了有效的hash值。这种hash值碰撞的几率有多大呢？直接决定着循环次数，一个有意思的话题，那接下来研究吧。    
              ```
              
