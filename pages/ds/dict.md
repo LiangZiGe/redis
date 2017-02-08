@@ -73,6 +73,27 @@ dict
              ```
              
    - dictht上bucket的hash碰撞分析
-   
-      >todo
+     
+      - cluster.h/clusterState: 集群*nodes和节点黑名单*nodes_black_list管理使用，hash key 为节点id，不会发生碰撞
+      - redis.h/redisServer：命令表*commands和原始命令表*orig_commands，hash key 为命令name，不会发生碰撞
+      - redis.h/redisDb：
+      
+            - 数据库键空间*dict，hash key 为命令name，不会发生碰撞
+            - 键的过期时间，字典的键为键，字典的值为过期事件 *expires，hash key 为UNIX 时间戳 ，有可能发生碰撞，当时间戳一样时发生碰撞。
+            - 正处于阻塞状态的键*blocking_keys hash key 为robj，todo
+            - 可以解除阻塞的键*ready_keys  hash key 为robj，todo
+            - 正在被 WATCH 命令监视的键*watched_keys hash key 为robj，todo
+            - 复制脚本缓存*repl_scriptcache_dict hash key 为sds(robj->ptr)，todo
+            -  Lua 脚本*lua_scripts hash key为SHA1 值，todo
+        
+      - redis.h/redisClient：订阅*pubsub_channels hash key 为robj，todo
+      - redis.h/redisObject：指向实际值的指针*ptr hash key 为robj，todo
+      - redis.h/zset：元素字典*dict  hash key 为 robj，todo
+      - redis.h/blockingState：造成阻塞的键*key hash key为robj，todo
+      
+      
+      
+      
+      
+        
          
