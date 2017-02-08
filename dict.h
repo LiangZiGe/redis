@@ -67,6 +67,9 @@ typedef struct dictEntry {
     void *key;
 
     // 值
+    // 这里使用union而不是struct
+    // 共同体，使用内存覆盖技术，各个成员公用同一段内存，共同体的大小是成员中占用内存最大的成员的大小。
+    // 由于使用了内存覆盖技术，修改一个成员的值可能其他成员的值也会变化
     union {
         void *val;
         uint64_t u64;
