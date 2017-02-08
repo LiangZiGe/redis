@@ -67,6 +67,9 @@ typedef struct dictEntry {
     void *key;
 
     // 值
+    // 这里使用union而不是struct
+    // 共同体，使用内存覆盖技术，各个成员公用同一段内存，共同体的大小是成员中占用内存最大的成员的大小。
+    // 由于使用了内存覆盖技术，修改一个成员的值可能其他成员的值也会变化
     union {
         void *val;
         uint64_t u64;
@@ -252,36 +255,36 @@ typedef void (dictScanFunction)(void *privdata, const dictEntry *de);
 #define dictIsRehashing(ht) ((ht)->rehashidx != -1)
 
 /* API */
-dict *dictCreate(dictType *type, void *privDataPtr);
-int dictExpand(dict *d, unsigned long size);
-int dictAdd(dict *d, void *key, void *val);
-dictEntry *dictAddRaw(dict *d, void *key);
-int dictReplace(dict *d, void *key, void *val);
-dictEntry *dictReplaceRaw(dict *d, void *key);
-int dictDelete(dict *d, const void *key);
-int dictDeleteNoFree(dict *d, const void *key);
-void dictRelease(dict *d);
-dictEntry * dictFind(dict *d, const void *key);
-void *dictFetchValue(dict *d, const void *key);
-int dictResize(dict *d);
-dictIterator *dictGetIterator(dict *d);
-dictIterator *dictGetSafeIterator(dict *d);
-dictEntry *dictNext(dictIterator *iter);
-void dictReleaseIterator(dictIterator *iter);
-dictEntry *dictGetRandomKey(dict *d);
+dict *dictCreate(dictType *type, void *privDataPtr);									// 创建字典
+int dictExpand(dict *d, PORT_ULONG size);												// 字典扩展
+int dictAdd(dict *d, void *key, void *val);												// 添加键值对
+dictEntry *dictAddRaw(dict *d, void *key);												// 由dictAdd调用，是添加元素的底层实现
+int dictReplace(dict *d, void *key, void *val);											// 添加或替换键值对
+dictEntry *dictReplaceRaw(dict *d, void *key);											// 由dictReplace调用,是更新操作的底层实现
+int dictDelete(dict *d, const void *key);												// 删除元素
+int dictDeleteNoFree(dict *d, const void *key);											// 删除元素，但是不回收
+void dictRelease(dict *d);																// 清空并释放字典
+dictEntry * dictFind(dict *d, const void *key);											// 给定key查找字典entry节点
+void *dictFetchValue(dict *d, const void *key);											// 查找给定键的值
+int dictResize(dict *d);																// 重置字典空间(缩小)
+dictIterator *dictGetIterator(dict *d);													// 获取字典迭代器(只进行next(), 不影响rehash)
+dictIterator *dictGetSafeIterator(dict *d);												// 获取字典迭代器(可进行更新操作)
+dictEntry *dictNext(dictIterator *iter);												// 获取迭代器的下一个entry
+void dictReleaseIterator(dictIterator *iter);											// 释放迭代器对象
+dictEntry *dictGetRandomKey(dict *d);													// 随机返回字典entry
+int dictGetRandomKeys(dict *d, dictEntry **des, int count);				                // 随机返回指定数量count（可能小于count）数量的entry，返回的entry链表头在des里 返回值为返回的数量
+void dictPrintStats(dict *d);															// 打印状态信息
+unsigned int dictGenHashFunction(const void *key, int len);								// 通用的hash函数区分大小写
+unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len);				// 不区分大小写的hash函数
+void dictEmpty(dict *d, void(callback)(void*));											// 清空及重置字典(不释放空间)
+void dictEnableResize(void);															// 设置字典可以resize
+void dictDisableResize(void);															// 禁用字典resize
+int dictRehash(dict *d, int n);															// 给定歩数下进行rehash
+int dictRehashMilliseconds(dict *d, int ms);											// 给定毫秒数内进行rehash
+void dictSetHashFunctionSeed(unsigned int initval);										// 设置hash函数seed
+unsigned int dictGetHashFunctionSeed(void);												// 获取hash函数see
+PORT_ULONG dictScan(dict *d, PORT_ULONG v, dictScanFunction *fn, void *privdata);		// 字典遍历
 int dictGetRandomKeys(dict *d, dictEntry **des, int count);
-void dictPrintStats(dict *d);
-unsigned int dictGenHashFunction(const void *key, int len);
-unsigned int dictGenCaseHashFunction(const unsigned char *buf, int len);
-void dictEmpty(dict *d, void(callback)(void*));
-void dictEnableResize(void);
-void dictDisableResize(void);
-int dictRehash(dict *d, int n);
-int dictRehashMilliseconds(dict *d, int ms);
-void dictSetHashFunctionSeed(unsigned int initval);
-unsigned int dictGetHashFunctionSeed(void);
-unsigned long dictScan(dict *d, unsigned long v, dictScanFunction *fn, void *privdata);
-
 /* Hash table types */
 extern dictType dictTypeHeapStringCopyKey;
 extern dictType dictTypeHeapStrings;
