@@ -73,35 +73,52 @@ dict
              ```
              
    - dictht上bucket的hash碰撞分析
-     
-        Hash table stats:
-         table size: 128
-         number of elements: 85
-         different slots: 52
-         max chain length: 5
-         avg chain length (counted): 1.63
-         avg chain length (computed): 1.63
-         Chain length distribution:
-           0: 76 (59.38%)
-           1: 32 (25.00%)
-           2: 12 (9.38%)
-           3: 5 (3.91%)
-           4: 1 (0.78%)
-           5: 2 (1.56%)
-        -- Rehashing into ht[1]:
-        Hash table stats:
-         table size: 256
-         number of elements: 75
-         different slots: 61
-         max chain length: 3
-         avg chain length (counted): 1.23
-         avg chain length (computed): 1.23
-         Chain length distribution:
-           0: 195 (76.17%)
-           1: 49 (19.14%)
-           2: 10 (3.91%)
-           3: 2 (0.78%)
-
+        
+       在linux环境下使用clion运行[main](/t/commandMain.c)方法：
+       
+            Hash table stats:
+             table size: 128
+             number of elements: 85
+             different slots: 52
+             max chain length: 5
+             avg chain length (counted): 1.63
+             avg chain length (computed): 1.63
+             Chain length distribution:
+               0: 76 (59.38%)
+               1: 32 (25.00%)
+               2: 12 (9.38%)
+               3: 5 (3.91%)
+               4: 1 (0.78%)
+               5: 2 (1.56%)
+            -- Rehashing into ht[1]:
+            Hash table stats:
+             table size: 256
+             number of elements: 75
+             different slots: 61
+             max chain length: 3
+             avg chain length (counted): 1.23
+             avg chain length (computed): 1.23
+             Chain length distribution:
+               0: 195 (76.17%)
+               1: 49 (19.14%)
+               2: 10 (3.91%)
+               3: 2 (0.78%)
+                   
+        结果表明，redis服务端初始化加载命令字典时max chain length = 5，碰撞的几率还是比较大的。当然不允许这种情况发生，否则性能会大大打扣，于是rehash出现了。
+        `_dictExpandIfNeeded`中：
+        ```C
+            // bucket中使用 >= 初始化大小 && (启用rehash标示 || 使用/初始化大小 > 强制rehash倍数)
+            if (d->ht[0].used >= d->ht[0].size &&
+                    (dict_can_resize ||
+                     d->ht[0].used/d->ht[0].size > dict_force_resize_ratio))
+                {
+                    // 新哈希表的大小至少是目前已使用节点数的两倍
+                    // T = O(N)
+                    return dictExpand(d, d->ht[0].used*2);
+                }
+        ```
+   - rehash
+        
 
       
       
