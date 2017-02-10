@@ -117,12 +117,3 @@ dict
                     return dictExpand(d, d->ht[0].used*2);
                 }
         ```
-   - rehash
-        
-
-      
-      
-      
-      
-        
-         
