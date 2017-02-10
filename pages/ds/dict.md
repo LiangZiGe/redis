@@ -129,7 +129,7 @@ dict
                  可以解除阻塞的键*ready_keys  hash key 为robj
                  正在被 WATCH 命令监视的键*watched_keys hash key 为robj
                  复制脚本缓存*repl_scriptcache_dict hash key 为sds(robj->ptr)
-                 Lua 脚本*lua_scripts hash key为SHA1 值，todo
+                 Lua 脚本*lua_scripts hash key为SHA1 值
            redis.h/redisClient：订阅*pubsub_channels hash key 为robj
            redis.h/redisObject：指向实际值的指针*ptr hash key 为robj
            redis.h/zset：元素字典*dict  hash key 为 robj
